@@ -27,7 +27,6 @@ class App extends Component {
 
   togglePopover(){
     if (!this.state.isOpen) {
-      // attach/remove event handler
       document.addEventListener('click', this.handleOutsideClick, false);
     } else {
       document.removeEventListener('click', this.handleOutsideClick, false);
@@ -37,7 +36,6 @@ class App extends Component {
   }
 
   handleOutsideClick(e) {
-    // ignore clicks on the component itself
     if (this.node.contains(e.target)) {
       return;
     }
@@ -94,12 +92,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*
-{
-images.map((avatar, key) => { return (
-<img className='avatar' key={key} src={Avatar1}/>
-
-)})
-}
-*/
