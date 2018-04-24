@@ -16,21 +16,41 @@ class App extends Component {
 
     this.state = {
       activeImage: Avatar1,
-      avatarState: 'inactive',
+      avatarState: '',
       isOpen: false
     }
 
+    this.handleClick = this.handleClick.bind(this)
     this.togglePopover = this.togglePopover.bind(this)
+    this.handleOutsideClick = this.handleOutsideClick.bind(this)
   }
 
   togglePopover(){
+    if (!this.state.isOpen) {
+      // attach/remove event handler
+      document.addEventListener('click', this.handleOutsideClick, false);
+    } else {
+      document.removeEventListener('click', this.handleOutsideClick, false);
+    }
+
     this.setState({isOpen: !this.state.isOpen})
   }
 
-  closePopOver() {
-    if (this.state.isOpen) {
-      this.setState({isOpen: false})
+  handleOutsideClick(e) {
+    // ignore clicks on the component itself
+    if (this.node.contains(e.target)) {
+      return;
     }
+
+    this.togglePopover();
+  }
+
+  handleClick(e) {
+    let source = e.target.name
+    setTimeout( () => {
+      this.setState({activeImage: source});
+      this.togglePopover();
+    }, 1000);
   }
 
   renderPopOver(){
@@ -38,18 +58,19 @@ class App extends Component {
       return (
         <div className='popover'>
           <div className='arrow-up'></div>
-          <div className='container'>
+          <div className='container' ref={node => { this.node = node; }}>
             <h3>Choose your avatar</h3>
             {images.map((avatar, key) => { return (
               <img
                 alt="avatar"
+                name={avatar}
                 key={key}
                 src={avatar}
                 className={`avatar ${this.state.avatarState}`}
-                onClick={() => {this.setState({activeImage: avatar, avatarState: 'active'}); this.closePopOver();}}/>
+                onClick={this.handleClick}/>
             )})}
           </div>
-          </div>
+        </div>
       )
     }
     else {
@@ -62,7 +83,7 @@ class App extends Component {
 
   render() {
     return (
-      <div className='app' onClick={this.closePopOver.bind(this)}>
+      <div className='app'>
         <div className='container'>
           <img alt="activeAvatar" className='active-avatar' src={this.state.activeImage} onClick={this.togglePopover} />
         </div>

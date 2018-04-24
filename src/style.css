@@ -40,9 +40,9 @@ body {
   border: 3px solid rgb(155, 160, 163);
 }
 
-/*.active {
+.spinning {
   border: 3px solid blue;
-}*/
+}
 
 .images {
   display: inline;
